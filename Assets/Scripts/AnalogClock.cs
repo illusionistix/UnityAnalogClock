@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AnalogClock : MonoBehaviour
 {
+    [SerializeField] private Text alarmText;
     [SerializeField] private LineRenderer pointerLinePrefab;
     private LineRenderer secondsPointer;
     private LineRenderer minutesPointer;
@@ -12,6 +14,8 @@ public class AnalogClock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        alarmText.gameObject.SetActive(false);
+
         secondsPointer = Instantiate(pointerLinePrefab, transform.position, pointerLinePrefab.transform.rotation);
         minutesPointer = Instantiate(pointerLinePrefab, transform.position, pointerLinePrefab.transform.rotation);
         hoursPointer = Instantiate(pointerLinePrefab, transform.position, pointerLinePrefab.transform.rotation);
@@ -39,5 +43,10 @@ public class AnalogClock : MonoBehaviour
         secondsPointer.SetPosition(1, new Vector3(0f, freqYseconds, freqZseconds) * 6f);
         minutesPointer.SetPosition(1, new Vector3(0f, freqYminutes, freqZminutes) * 6f);
         hoursPointer.SetPosition(1, new Vector3(0f, freqYhours, freqZhours) * 4f);
+
+        if (System.DateTime.Now.Second == 00 && System.DateTime.Now.Minute == 38)
+        {
+            alarmText.gameObject.SetActive(true);
+        }
     }
 }
