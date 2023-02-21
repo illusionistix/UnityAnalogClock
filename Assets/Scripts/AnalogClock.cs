@@ -15,7 +15,7 @@ public class AnalogClock : MonoBehaviour
 
     private LineRenderer markerLine;
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         alarmText.gameObject.SetActive(false);
@@ -59,7 +59,7 @@ public class AnalogClock : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         int msec = System.DateTime.Now.Millisecond;
@@ -68,11 +68,17 @@ public class AnalogClock : MonoBehaviour
         int hour = System.DateTime.Now.Hour;
         float twoPi = 2 * Mathf.PI;
 
-        float freqYseconds = Mathf.Sin(((msec / 60000f) + (sec / 60f)) * twoPi);
-        float freqZseconds = -Mathf.Cos(((msec / 60000f) + (sec / 60f)) * twoPi);
+        //float freqYseconds = Mathf.Sin(((msec / 60000f) + (sec / 60f)) * twoPi);
+        //float freqZseconds = -Mathf.Cos(((msec / 60000f) + (sec / 60f)) * twoPi);
 
-        float freqYminutes = Mathf.Sin((((msec / 3600000f) + (sec / 3600f)) + (min / 60f)) * twoPi);
-        float freqZminutes = -Mathf.Cos((((msec / 3600000f) + (sec / 3600f)) + (min / 60f)) * twoPi);
+        float freqYseconds = Mathf.Sin((sec / 60f) * twoPi);
+        float freqZseconds = -Mathf.Cos((sec / 60f) * twoPi);
+
+        //float freqYminutes = Mathf.Sin((((msec / 3600000f) + (sec / 3600f)) + (min / 60f)) * twoPi);
+        //float freqZminutes = -Mathf.Cos((((msec / 3600000f) + (sec / 3600f)) + (min / 60f)) * twoPi);
+
+        float freqYminutes = Mathf.Sin((min / 60f) * twoPi);
+        float freqZminutes = -Mathf.Cos((min / 60f) * twoPi);
 
         float freqYhours = Mathf.Sin(((((msec / 43200000f) + (sec / 43200f)) + (min / 720f)) + (hour / 12f)) * twoPi);
         float freqZhours = -Mathf.Cos(((((msec / 43200000f) + (sec / 43200f)) + (min / 720f)) + (hour / 12f)) * twoPi);
