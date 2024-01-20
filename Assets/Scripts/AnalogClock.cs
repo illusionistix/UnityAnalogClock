@@ -1,12 +1,14 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AnalogClock : MonoBehaviour
 {
-    [SerializeField] private Text alarmText;
+    //[SerializeField] private Text alarmText;
+    [SerializeField] private TextMeshProUGUI timeText;
     [SerializeField] private LineRenderer pointerLinePrefab;
     
     private LineRenderer secondsPointer;
@@ -15,10 +17,21 @@ public class AnalogClock : MonoBehaviour
 
     private LineRenderer markerLine;
 
-    
+    private int msec;
+    private int hour;
+    private int min;
+    private int sec;
+
+    private float twoPi;
+
+
     void Start()
     {
-        alarmText.gameObject.SetActive(false);
+
+        twoPi = 2 * Mathf.PI;
+
+
+        //alarmText.gameObject.SetActive(false);
         for (int i = 0; i < 60; i++)
         {
             float freqY = Mathf.Sin((i / 60f) * (2 * Mathf.PI));
@@ -49,11 +62,11 @@ public class AnalogClock : MonoBehaviour
         secondsPointer = Instantiate(pointerLinePrefab, transform.position, pointerLinePrefab.transform.rotation);
         minutesPointer = Instantiate(pointerLinePrefab, transform.position, pointerLinePrefab.transform.rotation);
         hoursPointer = Instantiate(pointerLinePrefab, transform.position, pointerLinePrefab.transform.rotation);
-
+                
         secondsPointer.endColor = Color.clear;
         minutesPointer.endColor = Color.clear;
         hoursPointer.endColor = Color.clear;
-
+        
         minutesPointer.startWidth = 0.2f;
         hoursPointer.startWidth = 0.35f;
         
@@ -62,11 +75,13 @@ public class AnalogClock : MonoBehaviour
     
     void Update()
     {
-        int msec = System.DateTime.Now.Millisecond;
-        int sec = System.DateTime.Now.Second;
-        int min = System.DateTime.Now.Minute;
-        int hour = System.DateTime.Now.Hour;
-        float twoPi = 2 * Mathf.PI;
+        hour = System.DateTime.Now.Hour;
+        min = System.DateTime.Now.Minute;
+        sec = System.DateTime.Now.Second;
+        msec = System.DateTime.Now.Millisecond;
+
+        UpdateTimeText();
+        
 
         //float freqYseconds = Mathf.Sin(((msec / 60000f) + (sec / 60f)) * twoPi);
         //float freqZseconds = -Mathf.Cos(((msec / 60000f) + (sec / 60f)) * twoPi);
@@ -86,12 +101,45 @@ public class AnalogClock : MonoBehaviour
         secondsPointer.SetPosition(1, new Vector3(0f, freqYseconds, freqZseconds) * 6f);
         minutesPointer.SetPosition(1, new Vector3(0f, freqYminutes, freqZminutes) * 6f);
         hoursPointer.SetPosition(1, new Vector3(0f, freqYhours, freqZhours) * 4f);
-
-        //Debug.Log("");
-
-        if (System.DateTime.Now.Second == 00 && System.DateTime.Now.Minute == 38)
-        {
-            alarmText.gameObject.SetActive(true);
-        }
+        
     }
+
+
+
+    private void UpdateTimeText()
+    {
+        string hoursText;
+        string minutesText;
+        string secondsText;
+
+        if (hour < 10)
+        {
+            hoursText = "0" + hour.ToString();
+        }
+        else
+        {
+            hoursText = hour.ToString();
+        }
+
+        if (min < 10)
+        {
+            minutesText = "0" + min.ToString();
+        }
+        else
+        {
+            minutesText = min.ToString();
+        }
+
+        if (sec < 10)
+        {
+            secondsText = "0" + sec.ToString();
+        }
+        else
+        {
+            secondsText = sec.ToString();
+        }
+
+        timeText.text = hoursText + ":" + minutesText + ":" + secondsText;
+    }
+
 }
